@@ -17,9 +17,9 @@ typedef struct _mp_obj_hmac_t {
 
 /****************************** HMAC ******************************/
 
-STATIC mp_obj_t hmac_HMAC_update(mp_obj_t self_in, mp_obj_t arg);
+static mp_obj_t hmac_HMAC_update(mp_obj_t self_in, mp_obj_t arg);
 
-STATIC mp_obj_t hmac_HMAC_make_new_helper(const mp_obj_type_t *type, size_t n_args, const mp_obj_t *pos_args, mp_map_t *kwargs){
+static mp_obj_t hmac_HMAC_make_new_helper(const mp_obj_type_t *type, size_t n_args, const mp_obj_t *pos_args, mp_map_t *kwargs){
     mp_arg_check_num(n_args, 0, 0, 3, true);
 
     enum { ARG_key, ARG_message, ARG_digestmod };
@@ -45,7 +45,7 @@ STATIC mp_obj_t hmac_HMAC_make_new_helper(const mp_obj_type_t *type, size_t n_ar
         return mp_const_none;
     }
 
-    mp_obj_hmac_t *o = m_new_obj_var(mp_obj_hmac_t, char, digestmod+sizeof(size_t));
+    mp_obj_hmac_t *o = m_new_obj_var(mp_obj_hmac_t, state, char, digestmod+sizeof(size_t));
     o->digestmod = digestmod;
     o->base.type = type;
 
@@ -62,7 +62,7 @@ STATIC mp_obj_t hmac_HMAC_make_new_helper(const mp_obj_type_t *type, size_t n_ar
     return MP_OBJ_FROM_PTR(o);
 }
 
-STATIC mp_obj_t hmac_HMAC_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
+static mp_obj_t hmac_HMAC_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
     mp_arg_check_num(n_args, n_kw, 0, MP_OBJ_FUN_ARGS_MAX, true);
 
     mp_map_t kw_args;
@@ -70,16 +70,16 @@ STATIC mp_obj_t hmac_HMAC_make_new(const mp_obj_type_t *type, size_t n_args, siz
     return hmac_HMAC_make_new_helper(type, n_args, args, &kw_args);
 }
 
-STATIC mp_obj_t hmac_HMAC_copy(mp_obj_t self_in) {
+static mp_obj_t hmac_HMAC_copy(mp_obj_t self_in) {
     mp_obj_hmac_t *self = MP_OBJ_TO_PTR(self_in);
-    mp_obj_hmac_t *o = m_new_obj_var(mp_obj_hmac_t, char, self->digestmod+sizeof(size_t));
+    mp_obj_hmac_t *o = m_new_obj_var(mp_obj_hmac_t, state, char, self->digestmod+sizeof(size_t));
     o->base.type = self->base.type;
     o->digestmod = self->digestmod;
     memcpy(o->state, self->state, self->digestmod);
     return MP_OBJ_FROM_PTR(o);
 }
 
-STATIC mp_obj_t hmac_HMAC_update(mp_obj_t self_in, mp_obj_t arg) {
+static mp_obj_t hmac_HMAC_update(mp_obj_t self_in, mp_obj_t arg) {
     mp_obj_hmac_t *self = MP_OBJ_TO_PTR(self_in);
     mp_buffer_info_t bufinfo;
     mp_get_buffer_raise(arg, &bufinfo, MP_BUFFER_READ);
@@ -91,7 +91,7 @@ STATIC mp_obj_t hmac_HMAC_update(mp_obj_t self_in, mp_obj_t arg) {
     return mp_const_none;
 }
 
-STATIC mp_obj_t hmac_HMAC_digest(mp_obj_t self_in) {
+static mp_obj_t hmac_HMAC_digest(mp_obj_t self_in) {
     mp_obj_hmac_t *self = MP_OBJ_TO_PTR(self_in);
     vstr_t vstr;
     if(self->digestmod == DIGEST_HMAC_SHA256){
@@ -104,19 +104,19 @@ STATIC mp_obj_t hmac_HMAC_digest(mp_obj_t self_in) {
     return mp_obj_new_str_from_vstr(&mp_type_bytes, &vstr);
 }
 
-STATIC MP_DEFINE_CONST_FUN_OBJ_2(hmac_HMAC_update_obj, hmac_HMAC_update);
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(hmac_HMAC_digest_obj, hmac_HMAC_digest);
-STATIC MP_DEFINE_CONST_FUN_OBJ_1(hmac_HMAC_copy_obj, hmac_HMAC_copy);
+static MP_DEFINE_CONST_FUN_OBJ_2(hmac_HMAC_update_obj, hmac_HMAC_update);
+static MP_DEFINE_CONST_FUN_OBJ_1(hmac_HMAC_digest_obj, hmac_HMAC_digest);
+static MP_DEFINE_CONST_FUN_OBJ_1(hmac_HMAC_copy_obj, hmac_HMAC_copy);
 
-STATIC const mp_rom_map_elem_t hmac_HMAC_locals_dict_table[] = {
+static const mp_rom_map_elem_t hmac_HMAC_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_update), MP_ROM_PTR(&hmac_HMAC_update_obj) },
     { MP_ROM_QSTR(MP_QSTR_digest), MP_ROM_PTR(&hmac_HMAC_digest_obj) },
     { MP_ROM_QSTR(MP_QSTR_copy), MP_ROM_PTR(&hmac_HMAC_copy_obj) },
 };
 
-STATIC MP_DEFINE_CONST_DICT(hmac_HMAC_locals_dict, hmac_HMAC_locals_dict_table);
+static MP_DEFINE_CONST_DICT(hmac_HMAC_locals_dict, hmac_HMAC_locals_dict_table);
 
-STATIC const mp_obj_type_t hmac_HMAC_type = {
+static const mp_obj_type_t hmac_HMAC_type = {
     { &mp_type_type },
     .name = MP_QSTR_HMAC,
     .make_new = hmac_HMAC_make_new,
@@ -124,25 +124,25 @@ STATIC const mp_obj_type_t hmac_HMAC_type = {
 };
 
 // key, msg=None, digestmod
-STATIC mp_obj_t hmac_new(size_t n_args, const mp_obj_t *args, mp_map_t *kwargs) {
+static mp_obj_t hmac_new(size_t n_args, const mp_obj_t *args, mp_map_t *kwargs) {
     return hmac_HMAC_make_new_helper(&hmac_HMAC_type, n_args, args, kwargs);
 }
-STATIC MP_DEFINE_CONST_FUN_OBJ_KW(hmac_new_obj, 0, hmac_new);
+static MP_DEFINE_CONST_FUN_OBJ_KW(hmac_new_obj, 0, hmac_new);
 
 
 /****************************** MODULE ******************************/
 
-STATIC const mp_rom_map_elem_t hmac_module_globals_table[] = {
+static const mp_rom_map_elem_t hmac_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_hmac) },
     { MP_ROM_QSTR(MP_QSTR_new), MP_ROM_PTR(&hmac_new_obj) },
     { MP_ROM_QSTR(MP_QSTR_HMAC), MP_ROM_PTR(&hmac_new_obj) },
 };
 
-STATIC MP_DEFINE_CONST_DICT(hmac_module_globals, hmac_module_globals_table);
+static MP_DEFINE_CONST_DICT(hmac_module_globals, hmac_module_globals_table);
 
 const mp_obj_module_t hmac_user_cmodule = {
     .base = { &mp_type_module },
     .globals = (mp_obj_dict_t*)&hmac_module_globals,
 };
 
-MP_REGISTER_MODULE(MP_QSTR_hmac, hmac_user_cmodule, MODULE_HASHLIB_ENABLED);
+MP_REGISTER_MODULE(MP_QSTR_hmac, hmac_user_cmodule);
