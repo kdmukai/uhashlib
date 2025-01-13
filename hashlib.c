@@ -49,7 +49,7 @@ static mp_obj_t hashlib_sha1_digest(mp_obj_t self_in) {
     vstr_t vstr;
     vstr_init_len(&vstr, SHA1_DIGEST_LENGTH);
     sha1_Final((SHA1_CTX*)self->state, (byte*)vstr.buf);
-    return mp_obj_new_str_from_vstr(&vstr);
+    return mp_obj_new_bytes_from_vstr(&vstr);
 }
 
 static MP_DEFINE_CONST_FUN_OBJ_2(hashlib_sha1_update_obj, hashlib_sha1_update);
@@ -118,7 +118,7 @@ static mp_obj_t hashlib_sha256_digest(mp_obj_t self_in) {
     vstr_t vstr;
     vstr_init_len(&vstr, SHA256_DIGEST_LENGTH);
     sha256_Final((SHA256_CTX*)self->state, (byte*)vstr.buf);
-    return mp_obj_new_str_from_vstr(&vstr);
+    return mp_obj_new_bytes_from_vstr(&vstr);
 }
 
 static MP_DEFINE_CONST_FUN_OBJ_2(hashlib_sha256_update_obj, hashlib_sha256_update);
@@ -186,7 +186,7 @@ static mp_obj_t hashlib_sha512_digest(mp_obj_t self_in) {
     vstr_t vstr;
     vstr_init_len(&vstr, SHA512_DIGEST_LENGTH);
     sha512_Final((SHA512_CTX*)self->state, (byte*)vstr.buf);
-    return mp_obj_new_str_from_vstr(&vstr);
+    return mp_obj_new_bytes_from_vstr(&vstr);
 }
 
 static MP_DEFINE_CONST_FUN_OBJ_2(hashlib_sha512_update_obj, hashlib_sha512_update);
@@ -255,7 +255,7 @@ static mp_obj_t hashlib_ripemd160_digest(mp_obj_t self_in) {
     vstr_t vstr;
     vstr_init_len(&vstr, RIPEMD160_DIGEST_LENGTH);
     ripemd160_Final((RIPEMD160_CTX*)self->state, (byte*)vstr.buf);
-    return mp_obj_new_str_from_vstr(&vstr);
+    return mp_obj_new_bytes_from_vstr(&vstr);
 }
 
 static MP_DEFINE_CONST_FUN_OBJ_2(hashlib_ripemd160_update_obj, hashlib_ripemd160_update);
@@ -314,7 +314,7 @@ static mp_obj_t hashlib_pbkdf2_hmac(size_t n_args, const mp_obj_t *args) {
         vstr_t vstr;
         vstr_init_len(&vstr, l);
         pbkdf2_hmac_sha256(pwdbuf.buf, pwdbuf.len, saltbuf.buf, saltbuf.len, iter, (byte*)vstr.buf, l);
-        return mp_obj_new_str_from_vstr(&vstr);
+        return mp_obj_new_bytes_from_vstr(&vstr);
     }
     if(strcmp(typebuf.buf, "sha512") == 0){
         // output length (dklen) if available
@@ -325,7 +325,7 @@ static mp_obj_t hashlib_pbkdf2_hmac(size_t n_args, const mp_obj_t *args) {
         vstr_t vstr;
         vstr_init_len(&vstr, l);
         pbkdf2_hmac_sha512(pwdbuf.buf, pwdbuf.len, saltbuf.buf, saltbuf.len, iter, (byte*)vstr.buf, l);
-        return mp_obj_new_str_from_vstr(&vstr);
+        return mp_obj_new_bytes_from_vstr(&vstr);
     }
     mp_raise_ValueError("Unsupported hash type");
     return mp_const_none;
@@ -343,7 +343,7 @@ static mp_obj_t hashlib_hmac_sha512(mp_uint_t n_args, const mp_obj_t *args){
     vstr_t vstr;
     vstr_init_len(&vstr, 64);
     hmac_sha512_oneline(keybuf.buf, keybuf.len, msgbuf.buf, msgbuf.len, (byte*)vstr.buf);
-    return mp_obj_new_str_from_vstr(&vstr);
+    return mp_obj_new_bytes_from_vstr(&vstr);
 }
 
 static MP_DEFINE_CONST_FUN_OBJ_VAR(hashlib_hmac_sha512_obj, 2, hashlib_hmac_sha512);
