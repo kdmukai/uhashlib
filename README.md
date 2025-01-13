@@ -6,7 +6,7 @@ Originally from https://github.com/diybitcoinhardware/f469-disco/tree/master/use
 
 extends `hashlib` micropython module with `ripemd160` and `sha512` functions.
 
-Also adds a single-line function for pbkdf2_hmac:
+Also adds a single-line function for pbkdf2_hmac (supports sha256 or sha512):
 
 `pbkdf2_hmac(hash_name, password, salt, iterations, bytes_to_read)`
 
