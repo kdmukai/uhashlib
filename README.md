@@ -6,13 +6,13 @@ Originally from https://github.com/diybitcoinhardware/f469-disco/tree/master/use
 
 extends `hashlib` micropython module with `ripemd160` and `sha512` functions.
 
-Also adds a single-line function for pbkdf2_hmac_sha512:
+Also adds a single-line function for pbkdf2_hmac:
 
-`pbkdf2_hmac_sha512(password, salt, iterations, bytes_to_read)`
+`pbkdf2_hmac(hash_name, password, salt, iterations, bytes_to_read)`
 
 in Bitcoin to generate a seed:
 
-`pbkdf2_hmac_sha512(mnemonic, 'mnemonic'+password, 2048, 64)`
+`pbkdf2_hmac('sha512', mnemonic, 'mnemonic'+password, 2048, 64)`
 
 ## TODO:
 
