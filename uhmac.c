@@ -101,7 +101,7 @@ static mp_obj_t hmac_HMAC_digest(mp_obj_t self_in) {
         vstr_init_len(&vstr, SHA512_DIGEST_LENGTH);
         hmac_sha512_Final((HMAC_SHA512_CTX*)self->state, (byte*)vstr.buf);
     }
-    return mp_obj_new_str_from_vstr(&vstr);
+    return mp_obj_new_bytes_from_vstr(&vstr);
 }
 
 static MP_DEFINE_CONST_FUN_OBJ_2(hmac_HMAC_update_obj, hmac_HMAC_update);
