@@ -17,11 +17,12 @@ target_include_directories(hashlib INTERFACE
     ${CMAKE_CURRENT_LIST_DIR}/
     ${CMAKE_CURRENT_LIST_DIR}/crypto
 )
-# target_compile_options(hashlib INTERFACE
-#     -DHAVE_CONFIG_H 
-#     -Wno-unused-function
-#     -Wno-error
-# )
+target_compile_options(hashlib INTERFACE
+    -DHAVE_CONFIG_H 
+    -Wno-unused-function
+    -Wno-error
+    -O2
+)
 
 # Link our INTERFACE library to the usermod target.
 target_link_libraries(usermod INTERFACE hashlib)
