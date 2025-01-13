@@ -1,5 +1,9 @@
 # Hash functions for Bitcoin
 
+Originally from https://github.com/diybitcoinhardware/f469-disco/tree/master/usermods/uhashlib
+
+---
+
 extends `hashlib` micropython module with `ripemd160` and `sha512` functions.
 
 Also adds a single-line function for pbkdf2_hmac_sha512:
