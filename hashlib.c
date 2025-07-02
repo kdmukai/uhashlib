@@ -334,7 +334,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR(hashlib_pbkdf2_hmac_obj, 4, hashlib_pbkdf2_hm
 
 /************************** hmac_sha512 **************************/
 
-static mp_obj_t hashlib_hmac_sha512(mp_uint_t n_args, const mp_obj_t *args){
+static mp_obj_t hashlib_hmac_sha512(size_t n_args, const mp_obj_t *args){
     //mp_obj_t key, mp_obj_t msg
     mp_buffer_info_t keybuf;
     mp_get_buffer_raise(args[0], &keybuf, MP_BUFFER_READ);
